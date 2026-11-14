@@ -1,35 +1,40 @@
-# Setting Up the Web App
+# PHP Database Web Application
 
-This guide will help you set up the project to run locally on your machine.
+A PHP/MySQL coursework app with registration, login, a theme preference saved
+in the session, and an admin view of database tables.
+The interface and sample database use Romanian labels.
 
-## Prerequisites
+## Local setup
 
-Before you begin, ensure you have the following installed:
+1. Install PHP with `mysqli` and a MySQL-compatible database, for example through
+   XAMPP. Clone `https://github.com/Kazumi565/Web-Application-PHP.git` into your
+   local web server's document root.
+2. Inspect `Assets/CREATE DATABASE Acte.txt` before importing it into a disposable
+   local database server. **The script drops and recreates the `Magazin`
+   database.** Do not run it against a database containing data you need.
+3. Set your local connection details in `connect_db()` in `dynamicFunctions.php`.
+   The existing defaults target `localhost`, database `Magazin`, and the local
+   XAMPP root account. Keep any edited credentials out of Git.
+4. With Apache and MySQL running, open
+   `http://localhost/Web-Application-PHP/` (adjust the folder name if needed).
 
-- [XAMPP](https://www.apachefriends.org/index.html): XAMPP is a free and open-source cross-platform web server solution stack package developed by Apache Friends, consisting mainly of the Apache HTTP Server, MariaDB database, and interpreters for scripts written in the PHP and Perl programming languages.
+## Project status
 
-## Installation Steps
+Run this coursework app only in a disposable local environment, using fictional
+data and passwords you do not use elsewhere. It still stores plaintext
+passwords. Before public hosting, it needs password hashing and a migration of
+existing accounts, prepared queries, CSRF protection and server-side validation.
+Table names also need consistent casing for case-sensitive hosts.
 
-1. **Install XAMPP**: If you haven't already installed XAMPP, download and install it from the [official website](https://www.apachefriends.org/index.html).
+The old password-recovery endpoint disclosed a stored password to anyone who
+knew an email address. Recovery is now disabled and returns an unavailable response without reading
+passwords. A replacement reset flow has not been implemented. Successful login
+now rotates the session identifier.
 
-2. **Clone the Repository**: Clone this repository to your local machine.
+## Structure
 
-    ```bash
-    git clone https://github.com/Kazumi565/Lab4.git
-    ```
-
-3. **Move the Folder to htdocs**: After cloning the repository, move the project folder to the `htdocs` directory of your XAMPP installation. By default, the `htdocs` directory is located in the XAMPP installation directory.
-
-4. **Run the Database Script**: Open phpMyAdmin and import the database script provided with the project. This script will create the necessary database tables and populate them with initial data.
-
-5. **Access the Web App**: Once the setup is complete, open your web browser and navigate to the following URL:
-
-    ```
-    http://localhost/DbSite
-    ```
-
-    This will take you to the homepage of the web app.
-
-## Support
-
-If you encounter any issues during the setup process, please don't hesitate to [create an issue](https://github.com/Kazumi565/Lab4/issues) on GitHub or reach out to the project contributors for assistance.
+- PHP pages: account, login, recovery status, and dashboard views.
+- `dynamicFunctions.php`: request dispatcher and database/session functions.
+- `Script/`: browser interactions.
+- `Styles/`: layout and themes.
+- `Assets/CREATE DATABASE Acte.txt`: destructive local database initialization.

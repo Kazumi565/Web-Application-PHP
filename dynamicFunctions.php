@@ -114,6 +114,7 @@ function connect_db()
 
 function set_session_data($data)
 {
+    session_regenerate_id(true);
     session_unset();
 
     $_SESSION['logged'] = true;
@@ -186,32 +187,9 @@ function attempt_add_user($data)
 }
 function reset_password($data)
 {
-    $response["email_found"] = "false";
-    $conn = connect_db();
-
-    $email = $conn->real_escape_string($data->email);
-
-    if (isArrayElementEmpty($data)) {
-        $response["error"] = "fields cannot be empty";
-    } else if (!isValidEmail($data->email)) {
-        $response["error"] = "Email does not follow the accepted structure (\"example@email.com\")";
-    }
-     else {
-        $sql = "SELECT parola FROM Utilizatori WHERE email = '$email'";
-        $result = $conn->query($sql);
-
-        if ($result !== FALSE) {
-            if ($result->num_rows > 0) {
-                $data = $result->fetch_all(MYSQLI_ASSOC)[0]["parola"];
-                $response=($data);
-            }
-        } else {
-            $response["error"] = "There was a request error";
-            $response["error"] = (string)$email;
-        }
-    }
-    $conn->close();
-    return $response;
+    // Recovery requires a verified, expiring token flow. Never disclose passwords.
+    http_response_code(503);
+    return ["error" => "Password reset is not available in this educational demo."];
 }
 
 function isArrayElementEmpty($data)
